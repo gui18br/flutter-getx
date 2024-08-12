@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_state_manager/src/simple/get_state.dart';
+import 'package:getx/value_controller.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,22 +18,17 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const HomePage(),
+      home: HomePage(),
     );
   }
 }
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class HomePage extends StatelessWidget {
+  HomePage({super.key});
 
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
   final textController = TextEditingController();
 
-  String definedValue = "";
+  final valueController = ValueController();
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +38,12 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Valor definido: $definedValue'),
+            GetBuilder<ValueController>(
+              init: valueController,
+              builder: (ctrl) {
+                return Text('Valor definido: ${ctrl.definedValue}');
+              },
+            ),
             TextField(
               controller: textController,
             ),
@@ -49,9 +51,7 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 String value = textController.text;
 
-                setState(() {
-                  definedValue = value;
-                });
+                valueController.setValue(value);
               },
               child: const Text('Confirmar'),
             )
