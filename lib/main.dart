@@ -21,17 +21,42 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final textController = TextEditingController();
+
+  String definedValue = "";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home Page'),
-      ),
-      body: const Center(
-        child: Text('Hello, Flutter!'),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Valor definido: $definedValue'),
+            TextField(
+              controller: textController,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                String value = textController.text;
+
+                setState(() {
+                  definedValue = value;
+                });
+              },
+              child: const Text('Confirmar'),
+            )
+          ],
+        ),
       ),
     );
   }
